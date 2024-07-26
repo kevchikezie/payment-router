@@ -4,7 +4,7 @@ namespace KevChikezie\PaymentRouter\Contracts;
 
 interface PaymentProcessorInterface
 {
-    public function processPayment(array $paymentDetails): bool;
+    public function processPayment(array $paymentDetails);
     public function getTransactionCost(): float;
     public function getReliabilityScore(): float;
     public function supportsCurrency(string $currency): bool;

@@ -1,6 +1,6 @@
 <?php
 
-namespace Kevchikezie\PaymentRoutingSystem;
+namespace Kevchikezie\PaymentRouter;
 
 use Kevchikezie\PaymentRouter\Contracts\PaymentProcessorInterface;
 use Illuminate\Support\Facades\Log;

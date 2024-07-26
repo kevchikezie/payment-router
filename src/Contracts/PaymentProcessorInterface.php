@@ -1,6 +1,6 @@
 <?php
 
-namespace KevChikezie\PaymentRouter\Contracts;
+namespace Kevchikezie\PaymentRouter\Contracts;
 
 interface PaymentProcessorInterface
 {

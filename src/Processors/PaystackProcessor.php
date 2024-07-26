@@ -1,6 +1,6 @@
 <?php
 
-namespace KevChikezie\PaymentRouter\Processors;
+namespace Kevchikezie\PaymentRouter\Processors;
 
 class PaystackProcessor extends PaymentProcessorAdapter
 {

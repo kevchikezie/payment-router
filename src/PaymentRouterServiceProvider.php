@@ -4,7 +4,7 @@ namespace Kevchikezie\PaymentRouter;
 
 use Illuminate\Support\ServiceProvider;
 
-class PaymentRoutingServiceProvider extends ServiceProvider
+class PaymentRouterServiceProvider extends ServiceProvider
 {
     public function register()
     {

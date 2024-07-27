@@ -13,7 +13,7 @@ class PaymentRouterServiceProvider extends ServiceProvider
             'payment-router'
         );
 
-        $this->app->singleton('payment.router', function ($app) {
+        $this->app->singleton(PaymentRouter::class, function ($app) {
             $router = new PaymentRouter();
 
             $processors = config('payment-router.processors');

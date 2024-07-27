@@ -43,7 +43,7 @@ class PaymentController extends Controller
             'amount' => $request->amount,
             'card_number' => $request->card_number,
             'transaction_id' => time() . rand(1000, 9999), // NB: Modify as needed
-            'currency' => 'USD',
+            'currency' => $request->currency // Example: 'USD',
         ];
 
         try {

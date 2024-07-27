@@ -14,7 +14,7 @@ abstract class PaymentProcessorAdapter implements PaymentProcessorInterface
     }
 
     abstract public function processPayment(array $paymentDetails);
-    abstract public function getTransactionCost(): float;
+    abstract public function getTransactionCost(string $currency): float;
     abstract public function getReliabilityScore(): float;
     abstract public function supportsCurrency(string $currency): bool;
 }

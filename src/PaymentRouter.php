@@ -17,27 +17,33 @@ class PaymentRouter
 
     public function route(array $paymentDetails): PaymentProcessorInterface
     {
-        $paymentDetails['card_number'] = Crypt::encrypt($paymentDetails['card_number']);
+        // $paymentDetails['card_number'] = Crypt::encrypt($paymentDetails['card_number']);
+        $currency = $paymentDetails['currency'];
+        $preferredProcessor = null;
+        $processorTransactionCosts = [];
 
-        $selectedProcessor = null;
-        $lowestCost = PHP_FLOAT_MAX;
-
+        // Get preferred processor based on the lowest transaction cost
         foreach ($this->processors as $processor) {
-            if ($processor->supportsCurrency($paymentDetails['currency'])) {
-                $cost = $processor->getTransactionCost();
-                if ($cost < $lowestCost) {
-                    $lowestCost = $cost;
-                    $selectedProcessor = $processor;
+            if ($processor->supportsCurrency($currency)) {
+                $transactionCost = $processor->getTransactionCost($currency);
+
+                array_push($processorTransactionCosts, $transactionCost);
+                $lowestCost = min($processorTransactionCosts);
+                if ($transactionCost === $lowestCost) {
+                    $preferredTransactionCost = $lowestCost;
+                    $preferredProcessor = $processor;
                 }
+
+                // if (count(array_unique($processorTransactionCosts)) === 1) {
+                //     $reliabilityScore = $processor->getReliabilityScore();
+                // }
             }
         }
 
-        if ($selectedProcessor === null) {
-            Log::error("No suitable payment processor found.");
+        if ($preferredProcessor === null) {
             throw new \Exception("No suitable payment processor found.");
         }
 
-        Log::info("Payment routed to processor", ['processor' => get_class($selectedProcessor)]);
-        return $selectedProcessor;
+        return $preferredProcessor;
     }
 }

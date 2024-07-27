@@ -4,14 +4,31 @@ namespace Kevchikezie\PaymentRouter\Processors;
 
 class FlutterwaveProcessor extends PaymentProcessorAdapter
 {
+    private $supportedCurrencies = ['USD', 'GBP', 'NGN', 'GHS'];
+    private $processor = 'flutterwave';
+
     public function processPayment(array $paymentDetails)
     {
-        // Process payment using Flutterwave
+        $paymentDetails['transaction_fee'] = $this->getTransactionCost($paymentDetails['currency']);
+        $paymentDetails['processor'] = $this->processor;
+
+        return $paymentDetails;
     }
 
-    public function getTransactionCost(): float
+    public function getTransactionCost(string $currency): float
     {
-        return 0.75;
+        if (!in_array($currency, $this->supportedCurrencies)) {
+            return null;
+        }
+
+        $transactionCost = [
+            'USD' => 1.75,
+            'GBP' => 1.9,
+            'NGN' => 0.25,
+            'GHS' => 0.23
+        ];
+
+        return $transactionCost[$currency];
     }
 
     public function getReliabilityScore(): float
@@ -21,7 +38,6 @@ class FlutterwaveProcessor extends PaymentProcessorAdapter
 
     public function supportsCurrency(string $currency): bool
     {
-        $supportedCurrencies = ['NGN', 'USD', 'GBP'];
-        return in_array($currency, $supportedCurrencies);
+        return in_array($currency, $this->supportedCurrencies);
     }
 }

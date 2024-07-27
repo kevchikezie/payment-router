@@ -4,14 +4,30 @@ namespace Kevchikezie\PaymentRouter\Processors;
 
 class PaystackProcessor extends PaymentProcessorAdapter
 {
+    private $supportedCurrencies = ['NGN', 'USD', 'EUR'];
+    private $processor = 'paystack';
+
     public function processPayment(array $paymentDetails)
     {
-        // Process payment using Paystack
+        $paymentDetails['transaction_fee'] = $this->getTransactionCost($paymentDetails['currency']);
+        $paymentDetails['processor'] = $this->processor;
+
+        return $paymentDetails;
     }
 
-    public function getTransactionCost(): float
+    public function getTransactionCost(string $currency): float
     {
-        return 1.25;
+        if (!in_array($currency, $this->supportedCurrencies)) {
+            return null;
+        }
+
+        $transactionCost = [
+            'NGN' => 0.15,
+            'USD' => 0.75,
+            'EUR' => 1.25,
+        ];
+
+        return $transactionCost[$currency];
     }
 
     public function getReliabilityScore(): float
@@ -21,7 +37,6 @@ class PaystackProcessor extends PaymentProcessorAdapter
 
     public function supportsCurrency(string $currency): bool
     {
-        $supportedCurrencies = ['NGN', 'USD', 'EUR'];
-        return in_array($currency, $supportedCurrencies);
+        return in_array($currency, $this->supportedCurrencies);
     }
 }

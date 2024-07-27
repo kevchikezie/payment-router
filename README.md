@@ -24,6 +24,41 @@ Publish the configuration file after the package is installed
 php artisan vendor:publish --provider="Kevchikezie\PaymentRouter\PaymentRouterServiceProvider"
 ```
 
+After running the command above, check your **config** folder, you should see a file named `payment-router.php`.
+The content of this file may look like or be configured as the sample below;
+
+```php
+<?php
+
+return [
+    'processors' => [
+        'flutterwave' => [
+            'class' => Kevchikezie\PaymentRouter\Processors\FlutterwaveProcessor::class,
+            'secret_key' => env('FLUTTERWAVE_SECRET_KEY'),
+            'public_key' => env('FLUTTERWAVE_PUBLIC_KEY'),
+            'supported_currencies' => ['USD', 'GBP', 'NGN', 'GHS'],
+            'transaction_cost' => [
+                'USD' => 1.2,
+                'GBP' => 1.9,
+                'NGN' => 0.25,
+                'GHS' => 0.23
+            ],
+        ],
+        'paystack' => [
+            'class' => Kevchikezie\PaymentRouter\Processors\PaystackProcessor::class,
+            'secret_key' => env('PAYSTACK_SECRET_KEY'),
+            'public_key' => env('PAYSTACK_PUBLIC_KEY'),
+            'supported_currencies' => ['NGN', 'USD', 'EUR'],
+            'transaction_cost' => [
+                'NGN' => 0.15,
+                'USD' => 0.75,
+                'EUR' => 1.25,
+            ],
+        ],
+    ],
+];
+```
+
 ## How do you use this package?
 
 Example usage in a controller:

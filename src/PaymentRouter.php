@@ -17,28 +17,32 @@ class PaymentRouter
 
     public function route(array $paymentDetails): PaymentProcessorInterface
     {
-        $currency = $paymentDetails['currency'];
-        $preferredProcessor = null;
-        $processorTransactionCosts = [];
+        try {
+            $currency = $paymentDetails['currency'];
+            $preferredProcessor = null;
+            $processorTransactionCosts = [];
 
-        // Get preferred processor based on the lowest transaction cost
-        foreach ($this->processors as $processor) {
-            if ($processor->supportsCurrency($currency)) {
-                $transactionCost = $processor->getTransactionCost($currency);
+            // Get preferred processor based on availability of currency and the lowest transaction cost
+            foreach ($this->processors as $processor) {
+                if ($processor->supportsCurrency($currency)) {
+                    $transactionCost = $processor->getTransactionCost($currency);
 
-                array_push($processorTransactionCosts, $transactionCost);
-                $lowestCost = min($processorTransactionCosts);
-                if ($transactionCost === $lowestCost) {
-                    $preferredTransactionCost = $lowestCost;
-                    $preferredProcessor = $processor;
+                    array_push($processorTransactionCosts, $transactionCost);
+                    $lowestTransactionCost = min($processorTransactionCosts);
+                    if ($transactionCost === $lowestTransactionCost) {
+                        $preferredProcessor = $processor;
+                    }
                 }
             }
-        }
 
-        if ($preferredProcessor === null) {
-            throw new \Exception("No suitable payment processor found.");
-        }
+            if ($preferredProcessor === null) {
+                throw new \Exception("No suitable payment processor found.");
+            }
 
-        return $preferredProcessor;
+            return $preferredProcessor;
+        } catch (\Exception $e) {
+            Log::error($e);
+            throw new \Exception("Payment processing failed.");
+        }
     }
 }

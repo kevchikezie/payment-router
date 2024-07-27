@@ -4,19 +4,26 @@ namespace Kevchikezie\PaymentRouter\Processors;
 
 class PaystackProcessor extends PaymentProcessorAdapter
 {
-    private $processor = 'paystack';
+    private const PROCESSOR_NAME = 'paystack';
+
+    public function getProcessorName(): string
+    {
+        return static::PROCESSOR_NAME;
+    }
 
     public function processPayment(array $paymentDetails)
     {
         $paymentDetails['transaction_fee'] = $this->getTransactionCost($paymentDetails['currency']);
-        $paymentDetails['processor'] = $this->processor;
+        $paymentDetails['processor'] = $this->getProcessorName();
+
+        // Make a request to Paystack
 
         return $paymentDetails;
     }
 
     public function getTransactionCost(string $currency): float
     {
-        $config = config('payment-router.processors')[$this->processor];
+        $config = config('payment-router.processors')[$this->getProcessorName()];
         $supportedCurrencies = $config['supported_currencies'];
         if (!in_array($currency, $supportedCurrencies)) {
             return null;
@@ -29,7 +36,7 @@ class PaystackProcessor extends PaymentProcessorAdapter
 
     public function supportsCurrency(string $currency): bool
     {
-        $config = config('payment-router.processors')[$this->processor];
+        $config = config('payment-router.processors')[$this->getProcessorName()];
         $supportedCurrencies = $config['supported_currencies'];
         return in_array($currency, $supportedCurrencies);
     }

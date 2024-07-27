@@ -13,6 +13,7 @@ abstract class PaymentProcessorAdapter implements PaymentProcessorInterface
         $this->config = $config;
     }
 
+    abstract public function getProcessorName(): string;
     abstract public function processPayment(array $paymentDetails);
     abstract public function getTransactionCost(string $currency): float;
     abstract public function supportsCurrency(string $currency): bool;

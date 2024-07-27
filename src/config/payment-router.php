@@ -4,12 +4,13 @@ return [
     'processors' => [
         'flutterwave' => [
             'class' => Kevchikezie\PaymentRouter\Processors\FlutterwaveProcessor::class,
-            'api_key' => env('STRIPE_API_KEY'),
+            'secret_key' => env('FLUTTERWAVE_SECRET_KEY'),
+            'public_key' => env('FLUTTERWAVE_PUBLIC_KEY'),
         ],
         'paystack' => [
             'class' => Kevchikezie\PaymentRouter\Processors\PaystackProcessor::class,
-            'client_id' => env('PAYPAL_CLIENT_ID'),
-            'client_secret' => env('PAYPAL_CLIENT_SECRET'),
+            'secret_key' => env('PAYSTACK_SECRET_KEY'),
+            'public_key' => env('PAYSTACK_PUBLIC_KEY'),
         ],
     ],
 ];

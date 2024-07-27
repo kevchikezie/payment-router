@@ -17,7 +17,6 @@ class PaymentRouter
 
     public function route(array $paymentDetails): PaymentProcessorInterface
     {
-        // $paymentDetails['card_number'] = Crypt::encrypt($paymentDetails['card_number']);
         $currency = $paymentDetails['currency'];
         $preferredProcessor = null;
         $processorTransactionCosts = [];
@@ -33,10 +32,6 @@ class PaymentRouter
                     $preferredTransactionCost = $lowestCost;
                     $preferredProcessor = $processor;
                 }
-
-                // if (count(array_unique($processorTransactionCosts)) === 1) {
-                //     $reliabilityScore = $processor->getReliabilityScore();
-                // }
             }
         }
 
